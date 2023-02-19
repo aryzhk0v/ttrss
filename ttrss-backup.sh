@@ -90,7 +90,7 @@ main () {
 	OPML_STATUS=""
 	ENV_STATUS=""
 	TAR_STATUS=""
-	BACKUP_STATUS_FILE=$SRC_DIR/ttrss-backup.status
+	BACKUP_STATUS_FILE=/var/log/ttrss-backup.status
 
 	TIMESTAMP=$(date '+%F')
 	TMP_DIR=$TIMESTAMP
