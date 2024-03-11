@@ -25,7 +25,7 @@ do_backup () {
 	[ -d $DEST_DIR ] || mkdir -p $DEST_DIR
 	[ -d $TMP_DIR ] || mkdir -p $TMP_DIR
 	source .env
-	docker exec -t --user=postgres ttrss-docker_db_1 pg_dump $TTRSS_DB_NAME  > ${TMP_DIR}/${TTRSS_DB_NAME}.sql
+	docker exec -t --user=postgres ttrss-docker-db-1 pg_dump $TTRSS_DB_NAME  > ${TMP_DIR}/${TTRSS_DB_NAME}.sql
 	EXIT_CODE=$?
 	if [ $EXIT_CODE -eq 0 ]; then
 		logger "Postgres dump OK"	
@@ -35,7 +35,7 @@ do_backup () {
 		PG_DUMP_STATUS="ERROR"
 	fi
 	gzip -9 ${TMP_DIR}/${TTRSS_DB_NAME}.sql
-	docker exec -t --user app ttrss-docker_app_1 /var/www/html/tt-rss/update.php --opml-export admin:admin-${TIMESTAMP}.opml > /dev/null 2>&1
+	docker exec -t --user app ttrss-docker-app-1 /var/www/html/tt-rss/update.php --opml-export admin:admin-${TIMESTAMP}.opml > /dev/null 2>&1
 	EXIT_CODE=$?
 	if [ $EXIT_CODE -eq 0 ]; then
 		logger "OPML dump OK"	
@@ -44,7 +44,7 @@ do_backup () {
 		logger "OPML dump ERROR"
 		OPML_STATUS="ERROR"
 	fi
-	docker cp  ttrss-docker_app_1:/var/www/html/tt-rss/admin-${TIMESTAMP}.opml ./$TMP_DIR > /dev/null 2>&1
+	docker cp  ttrss-docker-app-1:/var/www/html/tt-rss/admin-${TIMESTAMP}.opml ./$TMP_DIR > /dev/null 2>&1
 	EXIT_CODE=$?
 	if [ $EXIT_CODE -eq 0 ]; then
 		logger "OPML copy OK"	
